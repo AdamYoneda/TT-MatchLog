@@ -43,7 +43,7 @@
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="ログイン"
         android:backgroundTint="#009688"
         android:textColor="@color/white"
         android:padding="18dp"
