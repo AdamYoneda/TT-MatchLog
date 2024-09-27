@@ -61,4 +61,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // ViewModel and LiveData
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+
+    // Optional: ライフサイクル関連の拡張機能を追加する場合
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 }
