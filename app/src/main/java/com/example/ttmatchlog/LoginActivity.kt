@@ -23,5 +23,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SigninActivity::class.java)
             startActivity(intent)
         }
+
+        binding.loginBtn.setOnClickListener {
+            println("------------")
+            print(binding.email.getText().toString().trim())
+            print(binding.password.getText().toString().trim())
+        }
     }
 }
