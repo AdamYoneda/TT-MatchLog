@@ -1,10 +1,7 @@
-package com.example.ttmatchlog
+package com.example.ttmatchlog.view
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.ttmatchlog.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
