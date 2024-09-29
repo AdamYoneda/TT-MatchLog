@@ -25,6 +25,12 @@ class LoginViewModel : ViewModel() {
 
     // ログイン処理
     fun login(email: String, password: String) {
+        // 0. email または password が空の場合はすぐに false を返す
+        if (email.isEmpty() || password.isEmpty()) {
+            _loginResult.value = false
+            return
+        }
+
         // 1. Authでの既存のユーザーのログイン
         authLogin(email, password) { userId ->
             if (userId != null) {

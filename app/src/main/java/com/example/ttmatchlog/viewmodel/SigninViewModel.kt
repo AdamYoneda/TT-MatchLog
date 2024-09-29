@@ -26,6 +26,11 @@ class SigninViewModel : ViewModel() {
 
     // A. 新規ユーザー登録
     fun signup(userName: String, email: String, password: String) {
+        // A-0. email または password が空の場合はすぐに false を返す
+        if (userName.isEmpty()|| email.isEmpty() || password.isEmpty()) {
+            _signupResult.value = false
+            return
+        }
         // A-1 Authを使った新規登録
         registerUser(email, password) { userId ->
             if (userId != null) {
