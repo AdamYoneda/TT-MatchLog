@@ -33,11 +33,12 @@ class SigninActivity : AppCompatActivity() {
 
         // 登録ボタンのクリックイベント
         binding.signinBtn.setOnClickListener {
+            val userName = binding.userName.text.toString()
             val email = binding.email.text.toString().trim()
             val password = binding.password.text.toString().trim()
 
             // ViewModel に新規登録処理を依頼
-            signupViewModel.signup(email, password)
+            signupViewModel.signup(userName, email, password)
         }
 
         // 新規ユーザー登録の結果を監視
