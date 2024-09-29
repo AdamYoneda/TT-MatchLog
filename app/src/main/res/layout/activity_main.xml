@@ -10,13 +10,28 @@
     tools:context=".view.MainActivity">
 
     <TextView
+        android:id="@+id/userNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="User Name"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/joinedDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Joined Date"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp" />
 
     <Button
         android:id="@+id/signoutBtn"
