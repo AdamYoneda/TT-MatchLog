@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
 import com.example.myapplication_2.viewmodel.SigninViewModel
+import com.example.ttmatchlog.R
 import com.example.ttmatchlog.databinding.ActivitySigninBinding
 
 class SigninActivity : AppCompatActivity() {
@@ -14,6 +16,8 @@ class SigninActivity : AppCompatActivity() {
     private val signupViewModel: SigninViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setupSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         // bindingの初期化
@@ -54,5 +58,10 @@ class SigninActivity : AppCompatActivity() {
     private fun moveToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun setupSplashScreen() {
+        installSplashScreen()
+        setTheme(R.style.Theme_TTMatchLog)
     }
 }
