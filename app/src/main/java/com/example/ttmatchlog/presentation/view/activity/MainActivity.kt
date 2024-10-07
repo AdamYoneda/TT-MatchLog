@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+
+        binding.moveBtn.setOnClickListener {
+            val intent = Intent(this, MatchRecordActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     // Method to display user info
