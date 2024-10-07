@@ -1,6 +1,7 @@
 package com.example.ttmatchlog.presentation.view.activity
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +15,7 @@ import com.example.ttmatchlog.data.repository.TournamentRepository
 import com.example.ttmatchlog.presentation.view.adapter.MatchRecordAdapter
 import com.example.ttmatchlog.presentation.viewmodel.MatchRecordViewModel
 import com.example.ttmatchlog.presentation.viewmodel.MatchRecordViewModelFactory
+import com.example.ttmatchlog.utils.UserManager
 import com.google.android.material.navigation.NavigationView
 
 class MatchRecordActivity : AppCompatActivity() {
@@ -59,6 +61,13 @@ class MatchRecordActivity : AppCompatActivity() {
         toggle.syncState()
 
         val navView: NavigationView = findViewById(R.id.nav_view)
+
+        // ヘッダービューを取得
+        val headerView = navView.getHeaderView(0) // ヘッダーレイアウトの最初のビューを取得
+        val profileUserName: TextView = headerView.findViewById(R.id.profile_user_name)
+        val userName = UserManager.getUser()?.userName
+        profileUserName.text = userName
+
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_edit_profile -> {
