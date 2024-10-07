@@ -20,14 +20,21 @@ class SigninViewModel : ViewModel() {
     val signupResult: LiveData<Boolean> = _signupResult
 
     // 現在のユーザーのチェック
-    fun isUserLoggedIn(): Boolean {
-        return  auth.currentUser != null
+    fun checkUserLoggedIn() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            fetchUserInfo(currentUser.uid) { fetchedResult ->
+                _signupResult.value = fetchedResult
+            }
+        } else {
+            _signupResult.value = false
+        }
     }
 
     // A. 新規ユーザー登録
     fun signup(userName: String, email: String, password: String) {
         // A-0. email または password が空の場合はすぐに false を返す
-        if (userName.isEmpty()|| email.isEmpty() || password.isEmpty()) {
+        if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             _signupResult.value = false
             return
         }
@@ -38,8 +45,7 @@ class SigninViewModel : ViewModel() {
                 saveUserToFirestore(userId, userName, email) { isSaved ->
                     if (isSaved) {
                         // A-3 Firestoreからユーザー情報を取得
-                        fetchUserInfo(userId) { user ->
-                            // TODO: something
+                        fetchUserInfo(userId) { _ ->
                             _signupResult.value = true
                         }
                     } else {

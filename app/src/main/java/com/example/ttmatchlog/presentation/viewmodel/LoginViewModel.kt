@@ -19,8 +19,15 @@ class LoginViewModel : ViewModel() {
     val loginResult: LiveData<Boolean> = _loginResult
 
     // 現在のユーザーのチェック
-    fun isUserLoggedIn(): Boolean {
-        return auth.currentUser != null
+    fun checkUserLoggedIn() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            fetchUserInfo(currentUser.uid) { fetchResult ->
+                _loginResult.value = fetchResult
+            }
+        } else {
+            _loginResult.value = false
+        }
     }
 
     // ログイン処理
