@@ -1,4 +1,4 @@
-package com.example.ttmatchlog.view
+package com.example.ttmatchlog.presentation.view.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ttmatchlog.databinding.ActivityMainBinding
 import com.example.ttmatchlog.utils.UserManager
-import com.example.ttmatchlog.viewmodel.MainViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.ttmatchlog.presentation.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,6 +27,11 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.signout()
 
             val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.moveBtn.setOnClickListener {
+            val intent = Intent(this, MatchRecordActivity::class.java)
             startActivity(intent)
         }
     }

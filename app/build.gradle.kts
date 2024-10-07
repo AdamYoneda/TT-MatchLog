@@ -70,4 +70,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // 丸くトリミング
+    // https://github.com/hdodenhof/CircleImageView
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }

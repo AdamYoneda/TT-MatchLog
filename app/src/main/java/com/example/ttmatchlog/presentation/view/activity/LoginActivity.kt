@@ -1,4 +1,4 @@
-package com.example.ttmatchlog.view
+package com.example.ttmatchlog.presentation.view.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -27,9 +27,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // ユーザーがすでにログインしている場合、MainActivity に移動
-        if (loginViewModel.isUserLoggedIn()) {
-            moveToMainActivity()
-        }
+        // authでチェックして、ユーザー情報を取得し、結果を監視する
+        loginViewModel.checkUserLoggedIn()
+        loginViewModel.loginResult.observe(this, Observer { isLoggedIn ->
+            if (isLoggedIn) {
+                moveToMainActivity()
+            }
+        })
 
         // ログインボタンのクリックイベント
         binding.loginBtn.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.example.ttmatchlog.viewmodel
+package com.example.ttmatchlog.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.ttmatchlog.utils.UserManager

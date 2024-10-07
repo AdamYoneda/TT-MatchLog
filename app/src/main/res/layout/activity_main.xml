@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".view.MainActivity">
+    tools:context=".presentation.view.activity.MainActivity">
 
     <TextView
         android:id="@+id/userNameText"
@@ -39,6 +39,14 @@
         android:layout_height="wrap_content"
         android:text="Signout"
         android:layout_marginTop="30dp"
+        />
+
+    <Button
+        android:id="@+id/moveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="move to RecyclerView"
         />
 
 </LinearLayout>
