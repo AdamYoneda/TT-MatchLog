@@ -1,4 +1,4 @@
-package com.example.ttmatchlog.view
+package com.example.ttmatchlog.presentation.view.activity
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.ttmatchlog.model
+package com.example.ttmatchlog.data.model
 
 import com.google.firebase.Timestamp
 

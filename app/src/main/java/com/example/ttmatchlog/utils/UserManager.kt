@@ -1,6 +1,6 @@
 package com.example.ttmatchlog.utils
 
-import com.example.ttmatchlog.model.User
+import com.example.ttmatchlog.data.model.User
 import com.google.firebase.Timestamp
 
 object UserManager {
