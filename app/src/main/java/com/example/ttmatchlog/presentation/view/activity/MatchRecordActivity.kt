@@ -1,5 +1,6 @@
 package com.example.ttmatchlog.presentation.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -16,6 +17,7 @@ import com.example.ttmatchlog.presentation.view.adapter.MatchRecordAdapter
 import com.example.ttmatchlog.presentation.viewmodel.MatchRecordViewModel
 import com.example.ttmatchlog.presentation.viewmodel.MatchRecordViewModelFactory
 import com.example.ttmatchlog.utils.UserManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
 class MatchRecordActivity : AppCompatActivity() {
@@ -45,6 +47,16 @@ class MatchRecordActivity : AppCompatActivity() {
         viewModel.loadTournaments()
 
         setupDrawer() // ナビゲーションドロワーの設定
+
+        // Access the FloatingActionButton
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+
+        // Set a click listener on the FAB
+        fab.setOnClickListener {
+            // Navigate to match input screen, passing tournament data
+            val intent = Intent(this, TournamentInputActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupDrawer() {
