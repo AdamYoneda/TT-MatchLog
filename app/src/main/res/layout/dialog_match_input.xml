@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edit_opponent_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="対戦相手" />
+
+    <EditText
+        android:id="@+id/edit_player_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="自分のスコア" />
+
+    <EditText
+        android:id="@+id/edit_opponent_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="相手のスコア" />
+
+    <!-- 各セットのスコア入力フィールド -->
+    <EditText
+        android:id="@+id/edit_player_set1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="自分のセット1スコア" />
+
+    <EditText
+        android:id="@+id/edit_opponent_set1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="相手のセット1スコア" />
+
+    <EditText
+        android:id="@+id/edit_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="メモ" />
+
+</LinearLayout>
