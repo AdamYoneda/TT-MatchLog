@@ -8,42 +8,260 @@
     <EditText
         android:id="@+id/edit_opponent_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="対戦相手" />
 
-    <EditText
-        android:id="@+id/edit_player_score"
+    <!-- プレイヤーと対戦相手の総スコアをSpinnerに変更 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="自分のスコア" />
+        android:orientation="horizontal"
+        android:layout_marginEnd="8dp">
 
-    <EditText
-        android:id="@+id/edit_opponent_score"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自分のゲーム数"/>
+            <Spinner
+                android:id="@+id/spinner_player_game_score"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相手のゲーム数"/>
+            <Spinner
+                android:id="@+id/spinner_opponent_game_score"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 各セットのスコア (1セット目から7セット目) -->
+    <!-- 1ゲーム目 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="相手のスコア" />
+        android:orientation="horizontal"
+        >
 
-    <!-- 各セットのスコア入力フィールド -->
-    <EditText
-        android:id="@+id/edit_player_set1"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game1"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game1"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- 2ゲーム目 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="自分のセット1スコア" />
+        android:orientation="horizontal"
+        >
 
-    <EditText
-        android:id="@+id/edit_opponent_set1"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game2"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game2"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- 3ゲーム目 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="相手のセット1スコア" />
+        android:orientation="horizontal"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game3"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game3"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- 4ゲーム目 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game4"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game4"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- 5ゲーム目 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game5"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game5"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- 6ゲーム目 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game6"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game6"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- 7ゲーム目 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7ゲーム目"
+            android:layout_marginEnd="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_player_game7"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spinner_opponent_game7"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <!-- メモフィールド -->
     <EditText
         android:id="@+id/edit_note"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="メモ" />
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:hint="メモ"
+        android:inputType="text"
+        />
 
 </LinearLayout>
