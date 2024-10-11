@@ -1,7 +1,10 @@
 package com.example.ttmatchlog.presentation.view.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -54,7 +57,6 @@ class MatchInputActivity : AppCompatActivity() {
         val gameScoreAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, gameScoreRange)
         gameScoreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         val playerScoreSpinners = arrayOf(
             dialogView.findViewById<Spinner>(R.id.spinner_player_game1),
             dialogView.findViewById<Spinner>(R.id.spinner_player_game2),
@@ -136,6 +138,25 @@ class MatchInputActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .show()
+
+        val opponentNameEditText = dialogView.findViewById<EditText>(R.id.edit_opponent_name)
+        opponentNameEditText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val inputText = opponentNameEditText.text.toString().trim()
+
+                if (inputText.isEmpty()) {
+                    // 入力がホワイトスペースのみの場合、エラーメッセージを表示
+                    opponentNameEditText.error = "名前を正しく入力してください"
+                } else {
+                    // キーボードを閉じる
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
+                true
+            } else {
+                false
+            }
+        }
     }
 
     private fun calculateRoundNumber(): Int {

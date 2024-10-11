@@ -9,7 +9,10 @@
         android:id="@+id/edit_opponent_name"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="対戦相手" />
+        android:hint="対戦相手"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:maxLength="15" />
 
     <!-- プレイヤーと対戦相手の総スコアをSpinnerに変更 -->
     <LinearLayout
