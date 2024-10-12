@@ -20,6 +20,7 @@ import java.util.UUID
 
 class MatchInputActivity : AppCompatActivity() {
     private val matchList = mutableListOf<Match>()
+    private var roundNumber: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,16 +32,16 @@ class MatchInputActivity : AppCompatActivity() {
         val confirmButton: Button = findViewById(R.id.confirmButton)
 
         // 1. Adapterにカスタムレイアウトをセット
-        val adapter: MatchInputAdapter = MatchInputAdapter(this,matchList)
+        val adapter: MatchInputAdapter = MatchInputAdapter(this, matchList)
         matchListView.adapter = adapter
 
         // 2. アイテム追加ボタンの処理
         addItemButton.setOnClickListener {
-            showMatchInputDialog()
+            showMatchInputDialog(adapter)
         }
     }
 
-    private fun showMatchInputDialog() {
+    private fun showMatchInputDialog(adapter: MatchInputAdapter) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_match_input, null)
 
         // Spinnerにデータをセット（ゲーム数）
@@ -85,53 +86,49 @@ class MatchInputActivity : AppCompatActivity() {
             .setTitle("新しい試合を記録")
             .setView(dialogView)
             .setPositiveButton("OK") { dialog, _ ->
-//                // 入力データを取得
-//                val opponentName = opponentNameEditText.text.toString()
-//                val playerScore = playerScoreEditText.text.toString().toIntOrNull() ?: 0
-//                val opponentScore = opponentScoreEditText.text.toString().toIntOrNull() ?: 0
-//                val note = noteEditText.text.toString()
-//
-//                // 各セットのスコアを取得
-//                val playerSet1 = playerSet1EditText.text.toString().toIntOrNull() ?: 0
-//                val opponentSet1 = opponentSet1EditText.text.toString().toIntOrNull() ?: 0
-//                val playerSet2 = playerSet2EditText.text.toString().toIntOrNull() ?: 0
-//                val opponentSet2 = opponentSet2EditText.text.toString().toIntOrNull() ?: 0
-//                val playerSet3 = playerSet1EditText.text.toString().toIntOrNull() ?: 0
-//                val opponentSet3 = opponentSet1EditText.text.toString().toIntOrNull() ?: 0
-//
-//                // GameScoresの作成
-//                val gameScores = GameScores(
-//                    playerSet1 = playerSet1,
-//                    opponentSet1 = opponentSet1,
-//                    playerSet2 = null, // 他のセットはオプションに応じて値を設定
-//                    opponentSet2 = null,
-//                    playerSet3 = null,
-//                    opponentSet3 = null,
-//                    playerSet4 = null,
-//                    opponentSet4 = null,
-//                    playerSet5 = null,
-//                    opponentSet5 = null,
-//                    playerSet6 = null,
-//                    opponentSet6 = null,
-//                    playerSet7 = null,
-//                    opponentSet7 = null
-//                )
-//
-//                // UUIDを生成し、Matchオブジェクトを作成
-//                val newMatch = Match(
-//                    id = UUID.randomUUID().toString(),
-//                    roundNumber = calculateRoundNumber(), // ラウンド番号は自動計算
-//                    playerScore = playerScore,
-//                    opponentScore = opponentScore,
-//                    opponentName = opponentName,
-//                    gameScores = gameScores,
-//                    note = note
-//                )
-//
-//                // 作成されたMatchオブジェクトを使用して、データを保存したり表示したりする
-//                matchList.add(newMatch)
-//                adapter.notifyDataSetChanged() // ListViewを更新
+                // EditText から文字列を取得
+                val inputOpponentNameEditText =
+                    dialogView.findViewById<EditText>(R.id.edit_opponent_name)
+                val inputOpponentName = inputOpponentNameEditText.text.toString().trim()
+                val inputNote =
+                    dialogView.findViewById<EditText>(R.id.edit_note).text.toString().trim()
 
+                // Spinner からゲームスコアを取得
+                val playerGameScore = playerScoreSpinner.selectedItem as Int
+                val opponentGameScore = opponentScoreSpinner.selectedItem as Int
+
+                // Spinner から各ラウンドの点数を取得
+                val playerScores = playerScoreSpinners.map { it.selectedItem as Int }.toIntArray()
+                val opponentScores =
+                    opponentScoreSpinners.map { it.selectedItem as Int }.toIntArray()
+
+                // 各フィールドが正しく入力されているかチェック
+                if (inputOpponentName.isEmpty()) {
+                    inputOpponentNameEditText.error = "名前を入力してください"
+                } else {
+                    // Match オブジェクトを作成
+                    val newMatch = Match(
+                        id = UUID.randomUUID().toString(),
+                        roundNumber = roundNumber,
+                        playerScore = playerGameScore,
+                        opponentScore = opponentGameScore,
+                        opponentName = inputOpponentName,
+                        gameScores = GameScores(
+                            playerScores[0], opponentScores[0],
+                            playerScores[1], opponentScores[1],
+                            playerScores[2], opponentScores[2],
+                            playerScores[3], opponentScores[3],
+                            playerScores[4], opponentScores[4],
+                            playerScores[5], opponentScores[5],
+                            playerScores[6], opponentScores[6]
+                        ),
+                        note = inputNote
+                    )
+                    // 作成されたMatchオブジェクトを使用して、データを保存したり表示したりする
+                    matchList.add(newMatch)
+                    adapter.notifyDataSetChanged() // ListViewを更新
+                    roundNumber += 1
+                }
                 dialog.dismiss()
             }
             .setNegativeButton("キャンセル") { dialog, _ ->
@@ -149,7 +146,8 @@ class MatchInputActivity : AppCompatActivity() {
                     opponentNameEditText.error = "名前を正しく入力してください"
                 } else {
                     // キーボードを閉じる
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(v.windowToken, 0)
                 }
                 true
@@ -157,11 +155,6 @@ class MatchInputActivity : AppCompatActivity() {
                 false
             }
         }
-    }
-
-    private fun calculateRoundNumber(): Int {
-        // ラウンド番号を計算するロジック
-        return 1 // 例: 1回戦目
     }
 
     private fun saveMatch(match: Match) {

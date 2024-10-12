@@ -23,7 +23,7 @@ class MatchInputAdapter(context: Context, private val matches: MutableList<Match
         val scoreTextView = view.findViewById<TextView>(R.id.score)
 
         // データをビューにセット
-        opponentNameTextView.text = match?.opponentName
+        opponentNameTextView.text = "${match?.roundNumber}回戦 ${match?.opponentName}"
         scoreTextView.text = "${match?.playerScore} - ${match?.opponentScore}"
 
         return view
