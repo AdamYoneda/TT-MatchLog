@@ -3,12 +3,12 @@ package com.example.ttmatchlog.presentation.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ttmatchlog.R
@@ -22,17 +22,23 @@ import com.google.android.material.navigation.NavigationView
 
 class MatchRecordActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MatchRecordViewModel
+    private val viewModel: MatchRecordViewModel by viewModels {
+        MatchRecordViewModelFactory(TournamentRepository())
+    }
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_match_record)
 
-        // ViewModelの初期化
-        val repository = TournamentRepository()
-        viewModel = ViewModelProvider(this, MatchRecordViewModelFactory(repository))
-            .get(MatchRecordViewModel::class.java)
+        if (viewModel.checkUserIsLogout()) {
+            // ユーザーがログアウト状態ならLoginActivityに戻す
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
+        setContentView(R.layout.activity_match_record)
 
         // recyclerViewの初期化
         recyclerView = findViewById(R.id.recyclerView)
@@ -44,10 +50,14 @@ class MatchRecordActivity : AppCompatActivity() {
         })
 
         // データを読み込む
-        viewModel.loadTournaments()
+        val userId = UserManager.getUser()?.userId ?: return
+        viewModel.loadTournaments(userId)
 
-        setupDrawer() // ナビゲーションドロワーの設定
+        setupDrawer()
+        setupFab()
+    }
 
+    private fun setupFab() {
         // Access the FloatingActionButton
         val fab: FloatingActionButton = findViewById(R.id.fab)
 
@@ -89,7 +99,11 @@ class MatchRecordActivity : AppCompatActivity() {
                     // お問い合わせ処理
                 }
                 R.id.nav_logout -> {
-                    // ログアウト処理
+                    viewModel.signout()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish() // このActivityを終了
                 }
                 R.id.nav_delete_account -> {
                     // アカウント削除処理
