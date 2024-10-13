@@ -6,11 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ttmatchlog.data.model.Tournament
 import com.example.ttmatchlog.data.repository.TournamentRepository
+import com.example.ttmatchlog.utils.UserManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 // MatchRecordViewModel.kt
 class MatchRecordViewModel(private val repository: TournamentRepository) : ViewModel() {
-
+    private val auth: FirebaseAuth = Firebase.auth
     private val _tournaments = MutableLiveData<List<Tournament>>()
     val tournaments: LiveData<List<Tournament>> get() = _tournaments
 
@@ -25,5 +29,14 @@ class MatchRecordViewModel(private val repository: TournamentRepository) : ViewM
 
             _tournaments.value = sortedTournaments
         }
+    }
+
+    fun signout() {
+        auth.signOut()
+        UserManager.clearUser()
+    }
+
+    fun checkUserIsLogout(): Boolean {
+        return auth.currentUser == null
     }
 }

@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ttmatchlog.R
@@ -30,6 +29,15 @@ class MatchRecordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (viewModel.checkUserIsLogout()) {
+            // ユーザーがログアウト状態ならLoginActivityに戻す
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
         setContentView(R.layout.activity_match_record)
 
         // recyclerViewの初期化
@@ -91,7 +99,11 @@ class MatchRecordActivity : AppCompatActivity() {
                     // お問い合わせ処理
                 }
                 R.id.nav_logout -> {
-                    // ログアウト処理
+                    viewModel.signout()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish() // このActivityを終了
                 }
                 R.id.nav_delete_account -> {
                     // アカウント削除処理
