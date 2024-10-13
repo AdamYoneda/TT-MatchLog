@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ttmatchlog.R
@@ -20,6 +21,7 @@ import com.example.ttmatchlog.data.model.GameScores
 import com.example.ttmatchlog.data.model.Match
 import com.example.ttmatchlog.data.model.Tournament
 import com.example.ttmatchlog.presentation.view.adapter.MatchInputAdapter
+import com.example.ttmatchlog.presentation.viewmodel.MatchInputViewModel
 import com.example.ttmatchlog.utils.UserManager
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
@@ -30,6 +32,8 @@ class MatchInputActivity : AppCompatActivity() {
     private val matchList = mutableListOf<Match>()
     private var roundNumber: Int = 1
     private lateinit var tournament: Tournament
+
+    private val viewModel: MatchInputViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +49,7 @@ class MatchInputActivity : AppCompatActivity() {
         tournament = intent.getParcelableExtra("tournament") ?: return
 
         // 1. Adapterにカスタムレイアウトをセット
-        val adapter: MatchInputAdapter = MatchInputAdapter(this, matchList)
+        val adapter = MatchInputAdapter(this, matchList)
         matchListView.adapter = adapter
 
         // 2. アイテム追加ボタンの処理
@@ -55,7 +59,20 @@ class MatchInputActivity : AppCompatActivity() {
 
         // 3. 記録するボタンの処理
         confirmButton.setOnClickListener {
-            saveMatch()
+            viewModel.saveTournament(tournament, matchList)
+        }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.uploadStatus.observe(this) { isSuccess ->
+            if (isSuccess) {
+                showToast("記録に成功しました。")
+            } else {
+                showToast("記録に失敗しました。時間を置いて再度試してください。")
+            }
+            navigateBackToMatchRecordActivity()
         }
     }
 
@@ -172,53 +189,6 @@ class MatchInputActivity : AppCompatActivity() {
             } else {
                 false
             }
-        }
-    }
-
-    private fun saveMatch() {
-        val db = FirebaseFirestore.getInstance()
-        val userId = UserManager.getUser()?.userId ?: run {
-            Log.e("UserManager", "User ID not found")
-            showToast("ユーザーIDが見つかりません")
-            return // userIdがnullなら処理を中断
-        }
-
-        // Tournamentデータのアップロード
-        val tournamentRef = db.collection("users")
-            .document(userId)
-            .collection("tournaments")
-            .document(tournament.id)
-
-        tournamentRef.set(tournament)
-            .addOnSuccessListener {
-                Log.d("Firestore", "Tournament successfully uploaded.")
-                uploadMatches(tournamentRef) // 成功したら各Matchをアップロード
-            }
-            .addOnFailureListener { e ->
-                Log.e("Firestore", "Error uploading tournament", e)
-                showToast("記録に失敗しました。時間を置いて再度試してください。")
-                navigateBackToMatchRecordActivity() // エラー時に戻る
-            }
-    }
-
-    private fun uploadMatches(tournamentRef: DocumentReference) {
-        val matchesCollection = tournamentRef.collection("matches")
-
-        // Matchデータのアップロード
-        val tasks = matchList.map { match ->
-            matchesCollection.document(match.id).set(match)
-        }
-
-        // すべてのアップロードが成功したかどうかを確認
-        Tasks.whenAllComplete(tasks).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d("Firestore", "All matches successfully uploaded.")
-                showToast("記録に成功しました。")
-            } else {
-                Log.e("Firestore", "Some matches failed to upload.", task.exception)
-                showToast("記録に失敗しました。時間を置いて再度試してください。")
-            }
-            navigateBackToMatchRecordActivity() // 成否に関わらず画面遷移
         }
     }
 
