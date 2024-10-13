@@ -113,7 +113,12 @@ class TournamentInputActivity : AppCompatActivity() {
 
         val datePickerDialog =
             DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-                selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
+                // 月と日を2桁にフォーマット
+                val formattedMonth = String.format("%02d", selectedMonth + 1)
+                val formattedDay = String.format("%02d", selectedDay)
+
+                // 2桁にフォーマットされた日付を表示
+                selectedDate = "$selectedYear-$formattedMonth-$formattedDay"
                 datePickerButton.text = selectedDate
                 isDateSelected = true
                 validateInputs()
