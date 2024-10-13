@@ -35,7 +35,7 @@ class SigninActivity : AppCompatActivity() {
         signupViewModel.checkUserLoggedIn()
         signupViewModel.signupResult.observe(this, Observer { isLoggedIn ->
             if (isLoggedIn) {
-                moveToMainActivity()
+                moveToMatchRecordActivity()
             }
         })
 
@@ -52,15 +52,15 @@ class SigninActivity : AppCompatActivity() {
         // 新規ユーザー登録の結果を監視
         signupViewModel.signupResult.observe(this, Observer { isSuccess ->
             if (isSuccess) {
-                moveToMainActivity()
+                moveToMatchRecordActivity()
             } else {
                 Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun moveToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
+    private fun moveToMatchRecordActivity() {
+        val intent = Intent(this, MatchRecordActivity::class.java)
         startActivity(intent)
     }
 
