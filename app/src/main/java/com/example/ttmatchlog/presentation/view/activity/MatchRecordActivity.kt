@@ -3,6 +3,7 @@ package com.example.ttmatchlog.presentation.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -22,17 +23,14 @@ import com.google.android.material.navigation.NavigationView
 
 class MatchRecordActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MatchRecordViewModel
+    private val viewModel: MatchRecordViewModel by viewModels {
+        MatchRecordViewModelFactory(TournamentRepository())
+    }
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_record)
-
-        // ViewModelの初期化
-        val repository = TournamentRepository()
-        viewModel = ViewModelProvider(this, MatchRecordViewModelFactory(repository))
-            .get(MatchRecordViewModel::class.java)
 
         // recyclerViewの初期化
         recyclerView = findViewById(R.id.recyclerView)
@@ -44,10 +42,14 @@ class MatchRecordActivity : AppCompatActivity() {
         })
 
         // データを読み込む
-        viewModel.loadTournaments()
+        val userId = UserManager.getUser()?.userId ?: return
+        viewModel.loadTournaments(userId)
 
-        setupDrawer() // ナビゲーションドロワーの設定
+        setupDrawer()
+        setupFab()
+    }
 
+    private fun setupFab() {
         // Access the FloatingActionButton
         val fab: FloatingActionButton = findViewById(R.id.fab)
 
