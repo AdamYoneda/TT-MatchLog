@@ -12,6 +12,7 @@ import com.example.ttmatchlog.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
+    private var buttonIsClicked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
 
         // ログインボタンのクリックイベント
         binding.loginBtn.setOnClickListener {
+            buttonIsClicked = true
+
             val email = binding.email.text.toString().trim()
             val password = binding.password.text.toString().trim()
 
@@ -48,8 +51,9 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this, Observer { isSuccess ->
             if (isSuccess) {
                 moveToMatchRecordActivity()
-            } else {
-                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+            } else if (buttonIsClicked) {
+                Toast.makeText(this, "ログインに失敗しました。", Toast.LENGTH_SHORT).show()
+                buttonIsClicked = false
             }
         })
     }

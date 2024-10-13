@@ -14,6 +14,7 @@ import com.example.ttmatchlog.databinding.ActivitySigninBinding
 class SigninActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySigninBinding
     private val signupViewModel: SigninViewModel by viewModels()
+    private var buttonIsClicked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSplashScreen()
@@ -24,7 +25,7 @@ class SigninActivity : AppCompatActivity() {
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 登録画面への切り替え
+        // ログイン画面への切り替え
         binding.move.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -41,6 +42,8 @@ class SigninActivity : AppCompatActivity() {
 
         // 登録ボタンのクリックイベント
         binding.signinBtn.setOnClickListener {
+            buttonIsClicked = true
+
             val userName = binding.userName.text.toString()
             val email = binding.email.text.toString().trim()
             val password = binding.password.text.toString().trim()
@@ -53,8 +56,9 @@ class SigninActivity : AppCompatActivity() {
         signupViewModel.signupResult.observe(this, Observer { isSuccess ->
             if (isSuccess) {
                 moveToMatchRecordActivity()
-            } else {
-                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+            } else if (buttonIsClicked) {
+                Toast.makeText(this, "登録に失敗しました。", Toast.LENGTH_SHORT).show()
+                buttonIsClicked = false
             }
         })
     }
