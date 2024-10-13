@@ -9,7 +9,7 @@ data class Tournament(
     val date: String,                     // 大会日付
     val tournamentName: String,           // 大会名
     val matchType: MatchType,             // 試合形式（シングルス、ダブルス、団体戦）
-    val matches: List<Match> = emptyList()              // 試合リスト
+    var matches: List<Match> = emptyList()   // 試合リスト
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",

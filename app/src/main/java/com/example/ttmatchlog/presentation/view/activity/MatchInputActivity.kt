@@ -2,6 +2,7 @@ package com.example.ttmatchlog.presentation.view.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -10,7 +11,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ttmatchlog.R
@@ -18,6 +18,9 @@ import com.example.ttmatchlog.data.model.GameScores
 import com.example.ttmatchlog.data.model.Match
 import com.example.ttmatchlog.data.model.Tournament
 import com.example.ttmatchlog.presentation.view.adapter.MatchInputAdapter
+import com.example.ttmatchlog.utils.UserManager
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
 class MatchInputActivity : AppCompatActivity() {
@@ -49,8 +52,7 @@ class MatchInputActivity : AppCompatActivity() {
 
         // 3. 記録するボタンの処理
         confirmButton.setOnClickListener {
-//            saveMatch()
-            Toast.makeText(this, "大会名: ${tournament.tournamentName}, 日程: ${tournament.date}, type: ${tournament.matchType.getValue()}", Toast.LENGTH_LONG).show()
+            saveMatch()
         }
     }
 
@@ -58,7 +60,7 @@ class MatchInputActivity : AppCompatActivity() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_match_input, null)
 
         // Spinnerにデータをセット（ゲーム数）
-        val scoreRange = (0..7).toList()
+        val scoreRange = (0..4).toList()
         val scoreAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, scoreRange)
         scoreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         val playerScoreSpinner = dialogView.findViewById<Spinner>(R.id.spinner_player_game_score)
@@ -171,6 +173,50 @@ class MatchInputActivity : AppCompatActivity() {
     }
 
     private fun saveMatch() {
-        // Matchを保存する処理 (Firestoreなど)
+        val db = FirebaseFirestore.getInstance()
+        val uploadTournament = Tournament(
+            id = tournament.id,
+            date = tournament.date,
+            tournamentName = tournament.tournamentName,
+            matchType = tournament.matchType,
+            matches = matchList
+        )
+        val userId = UserManager.getUser()?.userId?.let { userId ->
+            // Tournamentデータのアップロード
+            val tournamentRef = db.collection("users")
+                .document(userId)
+                .collection("tournaments")
+                .document(uploadTournament.id)
+
+            // TournamentオブジェクトをFirestoreにアップロード
+            tournamentRef.set(tournament)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Tournament successfully uploaded.")
+
+                    // 各Matchをアップロード
+                    uploadMatches(tournamentRef)
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Firestore", "Error uploading tournament", e)
+                }
+        } ?: run {
+            // userId が null の場合の処理
+            Log.e("UserManager", "User ID not found")
+        }
+    }
+
+    private fun uploadMatches(tournamentRef: DocumentReference) {
+        val matchesCollection = tournamentRef.collection("matches")
+
+        // すべてのMatchをアップロード
+        for (match in matchList) {
+            matchesCollection.document(match.id).set(match)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Match ${match.id} successfully uploaded.")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Firestore", "Error uploading match ${match.id}", e)
+                }
+        }
     }
 }
