@@ -10,17 +10,20 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ttmatchlog.R
 import com.example.ttmatchlog.data.model.GameScores
 import com.example.ttmatchlog.data.model.Match
+import com.example.ttmatchlog.data.model.Tournament
 import com.example.ttmatchlog.presentation.view.adapter.MatchInputAdapter
 import java.util.UUID
 
 class MatchInputActivity : AppCompatActivity() {
     private val matchList = mutableListOf<Match>()
     private var roundNumber: Int = 1
+    private lateinit var tournament: Tournament
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,10 @@ class MatchInputActivity : AppCompatActivity() {
         val addItemButton: Button = findViewById(R.id.addItemButton)
         val confirmButton: Button = findViewById(R.id.confirmButton)
 
+        // 0. 入力したTournament情報を取得
+        // IntentからTournamentデータを取得
+        tournament = intent.getParcelableExtra("tournament") ?: return
+
         // 1. Adapterにカスタムレイアウトをセット
         val adapter: MatchInputAdapter = MatchInputAdapter(this, matchList)
         matchListView.adapter = adapter
@@ -38,6 +45,12 @@ class MatchInputActivity : AppCompatActivity() {
         // 2. アイテム追加ボタンの処理
         addItemButton.setOnClickListener {
             showMatchInputDialog(adapter)
+        }
+
+        // 3. 記録するボタンの処理
+        confirmButton.setOnClickListener {
+//            saveMatch()
+            Toast.makeText(this, "大会名: ${tournament.tournamentName}, 日程: ${tournament.date}, type: ${tournament.matchType.getValue()}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -157,7 +170,7 @@ class MatchInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveMatch(match: Match) {
+    private fun saveMatch() {
         // Matchを保存する処理 (Firestoreなど)
     }
 }

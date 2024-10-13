@@ -15,8 +15,11 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ttmatchlog.R
+import com.example.ttmatchlog.data.model.Match
 import com.example.ttmatchlog.data.model.MatchType
+import com.example.ttmatchlog.data.model.Tournament
 import java.util.Calendar
+import java.util.UUID
 
 class TournamentInputActivity : AppCompatActivity() {
 
@@ -83,10 +86,20 @@ class TournamentInputActivity : AppCompatActivity() {
         // Handle form submission
         findViewById<Button>(R.id.nextButton).setOnClickListener {
             val tournamentName = tournamentNameEditText.text.toString()
-            val selectedMatchType = selectedMatchType.getValue()
+            val selectedMatchTypeString = matchTypeSpinner.selectedItem as String
+            val selectedMatchType = MatchType.values().first { it.getValue() == selectedMatchTypeString }
+
+            val tournament = Tournament(
+                id = UUID.randomUUID().toString(),
+                date = selectedDate,
+                tournamentName = tournamentName,
+                matchType = selectedMatchType
+            )
 
             // Navigate to match input screen, passing tournament data
-            val intent = Intent(this, MatchInputActivity::class.java)
+            val intent = Intent(this, MatchInputActivity::class.java).apply {
+                putExtra("tournament", tournament)
+            }
             startActivity(intent)
         }
     }
