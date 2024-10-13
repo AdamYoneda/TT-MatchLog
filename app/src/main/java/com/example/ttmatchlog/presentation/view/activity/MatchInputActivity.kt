@@ -1,6 +1,7 @@
 package com.example.ttmatchlog.presentation.view.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ttmatchlog.R
@@ -19,6 +21,7 @@ import com.example.ttmatchlog.data.model.Match
 import com.example.ttmatchlog.data.model.Tournament
 import com.example.ttmatchlog.presentation.view.adapter.MatchInputAdapter
 import com.example.ttmatchlog.utils.UserManager
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
@@ -181,42 +184,61 @@ class MatchInputActivity : AppCompatActivity() {
             matchType = tournament.matchType,
             matches = matchList
         )
-        val userId = UserManager.getUser()?.userId?.let { userId ->
-            // Tournamentデータのアップロード
-            val tournamentRef = db.collection("users")
-                .document(userId)
-                .collection("tournaments")
-                .document(uploadTournament.id)
-
-            // TournamentオブジェクトをFirestoreにアップロード
-            tournamentRef.set(tournament)
-                .addOnSuccessListener {
-                    Log.d("Firestore", "Tournament successfully uploaded.")
-
-                    // 各Matchをアップロード
-                    uploadMatches(tournamentRef)
-                }
-                .addOnFailureListener { e ->
-                    Log.e("Firestore", "Error uploading tournament", e)
-                }
-        } ?: run {
-            // userId が null の場合の処理
+        val userId = UserManager.getUser()?.userId ?: run {
             Log.e("UserManager", "User ID not found")
+            showToast("ユーザーIDが見つかりません")
+            return // userIdがnullなら処理を中断
         }
+
+        // Tournamentデータのアップロード
+        val tournamentRef = db.collection("users")
+            .document(userId)
+            .collection("tournaments")
+            .document(uploadTournament.id)
+
+        tournamentRef.set(uploadTournament)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Tournament successfully uploaded.")
+                uploadMatches(tournamentRef) // 成功したら各Matchをアップロード
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error uploading tournament", e)
+                showToast("記録に失敗しました。時間を置いて再度試してください。")
+                navigateBackToMatchRecordActivity() // エラー時に戻る
+            }
     }
 
     private fun uploadMatches(tournamentRef: DocumentReference) {
         val matchesCollection = tournamentRef.collection("matches")
 
-        // すべてのMatchをアップロード
-        for (match in matchList) {
+        // Matchデータのアップロード
+        val tasks = matchList.map { match ->
             matchesCollection.document(match.id).set(match)
-                .addOnSuccessListener {
-                    Log.d("Firestore", "Match ${match.id} successfully uploaded.")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("Firestore", "Error uploading match ${match.id}", e)
-                }
         }
+
+        // すべてのアップロードが成功したかどうかを確認
+        Tasks.whenAllComplete(tasks).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("Firestore", "All matches successfully uploaded.")
+                showToast("記録に成功しました。")
+            } else {
+                Log.e("Firestore", "Some matches failed to upload.", task.exception)
+                showToast("記録に失敗しました。時間を置いて再度試してください。")
+            }
+            navigateBackToMatchRecordActivity() // 成否に関わらず画面遷移
+        }
+    }
+
+    // Toastメッセージを表示する関数
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // MatchRecordActivityに戻る関数
+    private fun navigateBackToMatchRecordActivity() {
+        val intent = Intent(this, MatchRecordActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish() // このActivityを終了
     }
 }
