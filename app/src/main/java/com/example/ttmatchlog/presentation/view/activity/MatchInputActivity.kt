@@ -177,13 +177,6 @@ class MatchInputActivity : AppCompatActivity() {
 
     private fun saveMatch() {
         val db = FirebaseFirestore.getInstance()
-        val uploadTournament = Tournament(
-            id = tournament.id,
-            date = tournament.date,
-            tournamentName = tournament.tournamentName,
-            matchType = tournament.matchType,
-            matches = matchList
-        )
         val userId = UserManager.getUser()?.userId ?: run {
             Log.e("UserManager", "User ID not found")
             showToast("ユーザーIDが見つかりません")
@@ -194,9 +187,9 @@ class MatchInputActivity : AppCompatActivity() {
         val tournamentRef = db.collection("users")
             .document(userId)
             .collection("tournaments")
-            .document(uploadTournament.id)
+            .document(tournament.id)
 
-        tournamentRef.set(uploadTournament)
+        tournamentRef.set(tournament)
             .addOnSuccessListener {
                 Log.d("Firestore", "Tournament successfully uploaded.")
                 uploadMatches(tournamentRef) // 成功したら各Matchをアップロード
