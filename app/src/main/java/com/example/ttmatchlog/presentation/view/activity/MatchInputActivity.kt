@@ -54,7 +54,7 @@ class MatchInputActivity : AppCompatActivity() {
 
         // 2. アイテム追加ボタンの処理
         addItemButton.setOnClickListener {
-            showMatchInputDialog(adapter)
+            showMatchInputDialog(adapter, tournament.id)
         }
 
         // 3. 記録するボタンの処理
@@ -76,7 +76,7 @@ class MatchInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMatchInputDialog(adapter: MatchInputAdapter) {
+    private fun showMatchInputDialog(adapter: MatchInputAdapter, tournamentId: String) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_match_input, null)
 
         // Spinnerにデータをセット（ゲーム数）
@@ -157,7 +157,8 @@ class MatchInputActivity : AppCompatActivity() {
                             playerScores[5], opponentScores[5],
                             playerScores[6], opponentScores[6]
                         ),
-                        note = inputNote
+                        note = inputNote,
+                        tournamentId = tournamentId
                     )
                     // 作成されたMatchオブジェクトを使用して、データを保存したり表示したりする
                     matchList.add(newMatch)

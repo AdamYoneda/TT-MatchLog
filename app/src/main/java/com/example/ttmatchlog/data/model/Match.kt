@@ -12,7 +12,7 @@ data class Match(
     val opponentName: String = "",
     val gameScores: GameScores = GameScores(), // 各セットの詳細スコア
     val note: String = "",
-    val tournamentId: String
+    val tournamentId: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
