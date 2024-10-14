@@ -1,5 +1,8 @@
 package com.example.ttmatchlog.data.model
 
+import android.os.Parcel
+import android.os.Parcelable
+
 // 試合の詳細 (スコア、自分と相手の各セットの得点)
 data class Match(
     val id: String = "",
@@ -7,6 +10,38 @@ data class Match(
     val playerScore: Int = 0,                 // 自分の総スコア
     val opponentScore: Int = 0,               // 相手の総スコア
     val opponentName: String = "",
-    val gameScores: GameScores = GameScores(),            // 各セットの詳細スコア
+    val gameScores: GameScores = GameScores(), // 各セットの詳細スコア
     val note: String = ""
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readParcelable(GameScores::class.java.classLoader) ?: GameScores(),
+        parcel.readString() ?: ""
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeInt(roundNumber)
+        parcel.writeInt(playerScore)
+        parcel.writeInt(opponentScore)
+        parcel.writeString(opponentName)
+        parcel.writeParcelable(gameScores, flags)
+        parcel.writeString(note)
+    }
+
+    override fun describeContents(): Int = 0
+
+    companion object CREATOR : Parcelable.Creator<Match> {
+        override fun createFromParcel(parcel: Parcel): Match {
+            return Match(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Match?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
