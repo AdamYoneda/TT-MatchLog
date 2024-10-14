@@ -1,11 +1,13 @@
 package com.example.ttmatchlog.presentation.view.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ttmatchlog.R
 import com.example.ttmatchlog.data.model.Match
 import com.example.ttmatchlog.data.model.Tournament
+import com.example.ttmatchlog.presentation.view.activity.MatchDetailActivity
 import com.example.ttmatchlog.presentation.view.viewholder.MatchViewHolder
 import com.example.ttmatchlog.presentation.view.viewholder.TournamentViewHolder
 
@@ -48,8 +50,18 @@ class MatchRecordAdapter(private val tournaments: List<Tournament>) : RecyclerVi
             // Tournamentデータをバインド
             holder.bind(tournaments[getTournamentIndex(position)])
         } else if (holder is MatchViewHolder) {
+            val match = getMatchAtPosition(position)
             // Matchデータをバインド
-            holder.bind(getMatchAtPosition(position))
+            holder.bind(match)
+
+            // セルのクリックリスナーを設定
+            holder.itemView.setOnClickListener { view ->
+                val context = view.context
+                val intent = Intent(context, MatchDetailActivity::class.java).apply {
+                    putExtra("EXTRA_MATCH", match)
+                }
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -78,6 +90,18 @@ class MatchRecordAdapter(private val tournaments: List<Tournament>) : RecyclerVi
             itemCount += 1 + tournaments[i].matches.size
         }
         throw IllegalArgumentException("Invalid position for tournament")
+    }
+
+    private fun getTournamentIndexForMatch(position: Int): Int {
+        var itemCount = 0
+        for (i in tournaments.indices) {
+            itemCount += 1
+            for (match in tournaments[i].matches) {
+                if (position == itemCount) return i
+                itemCount += 1
+            }
+        }
+        throw IllegalArgumentException("Invalid position for match")
     }
 
     // positionに基づいて対応するMatchを返す
