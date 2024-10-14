@@ -11,7 +11,8 @@ data class Match(
     val opponentScore: Int = 0,               // 相手の総スコア
     val opponentName: String = "",
     val gameScores: GameScores = GameScores(), // 各セットの詳細スコア
-    val note: String = ""
+    val note: String = "",
+    val tournamentId: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -20,6 +21,7 @@ data class Match(
         parcel.readInt(),
         parcel.readString() ?: "",
         parcel.readParcelable(GameScores::class.java.classLoader) ?: GameScores(),
+        parcel.readString() ?: "",
         parcel.readString() ?: ""
     )
 
@@ -31,6 +33,7 @@ data class Match(
         parcel.writeString(opponentName)
         parcel.writeParcelable(gameScores, flags)
         parcel.writeString(note)
+        parcel.writeString(tournamentId)
     }
 
     override fun describeContents(): Int = 0
