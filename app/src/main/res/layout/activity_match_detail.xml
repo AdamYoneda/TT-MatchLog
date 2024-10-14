@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:background="@drawable/stroke_text"
             android:gravity="center"
-            android:text="プレイヤー名"
+            android:text="選手名"
             android:textSize="15sp" />
 
         <TextView
