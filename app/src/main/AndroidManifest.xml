@@ -13,6 +13,9 @@
         android:theme="@style/Theme.TTMatchLog"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.view.activity.MatchDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.view.activity.MatchInputActivity"
             android:exported="false" />
         <activity
