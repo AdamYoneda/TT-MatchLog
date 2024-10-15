@@ -52,6 +52,9 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#available-libraries
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    // Add the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-storage")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
