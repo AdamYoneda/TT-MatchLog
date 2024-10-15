@@ -2,9 +2,9 @@ package com.example.ttmatchlog.presentation.view.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -14,11 +14,15 @@ import androidx.lifecycle.Observer
 import com.example.myapplication_2.viewmodel.SignInViewModel
 import com.example.ttmatchlog.R
 import com.example.ttmatchlog.databinding.ActivitySigninBinding
+import com.example.ttmatchlog.utils.UserManager
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySigninBinding
     private val signupViewModel: SignInViewModel by viewModels()
     private var buttonIsClicked = false
+    private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSplashScreen()
@@ -54,13 +58,23 @@ class SignInActivity : AppCompatActivity() {
         // 登録ボタンのクリックイベント
         binding.signinBtn.setOnClickListener {
             buttonIsClicked = true
-
             val userName = binding.userName.text.toString()
             val email = binding.email.text.toString().trim()
             val password = binding.password.text.toString().trim()
 
-            // ViewModel に新規登録処理を依頼
-            signupViewModel.signup(userName, email, password)
+            if (selectedImageUri != null) {
+                // Upload image and proceed to sign-up
+                signupViewModel.uploadImageToFirebase(selectedImageUri!!) { imageUrl ->
+                    if (imageUrl != null) {
+                        signupViewModel.signup(userName, email, password, imageUrl)
+                    } else {
+                        Toast.makeText(this, "画像のアップロードに失敗しました", Toast.LENGTH_SHORT).show()
+                        buttonIsClicked = false
+                    }
+                }
+            } else {
+                Toast.makeText(this, "アイコン画像を選択してください", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // 新規ユーザー登録の結果を監視
@@ -89,9 +103,8 @@ class SignInActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
-                val data = it.data
-                val imgUri = data?.data
-                findViewById<ImageView>(R.id.userIconImageView).setImageURI(imgUri)
+                selectedImageUri = it.data?.data
+                binding.userIconImageView.setImageURI(selectedImageUri)
             }
         }
 }
