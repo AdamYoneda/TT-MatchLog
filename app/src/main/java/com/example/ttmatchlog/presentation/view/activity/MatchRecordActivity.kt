@@ -1,7 +1,10 @@
 package com.example.ttmatchlog.presentation.view.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -12,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ttmatchlog.R
+import com.example.ttmatchlog.data.repository.ImageRepository
 import com.example.ttmatchlog.data.repository.TournamentRepository
 import com.example.ttmatchlog.presentation.view.adapter.MatchRecordAdapter
 import com.example.ttmatchlog.presentation.viewmodel.MatchRecordViewModel
@@ -26,6 +30,7 @@ class MatchRecordActivity : AppCompatActivity() {
         MatchRecordViewModelFactory(TournamentRepository())
     }
     private lateinit var recyclerView: RecyclerView
+    private lateinit var imageRepository: ImageRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,8 @@ class MatchRecordActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_match_record)
+
+        imageRepository = ImageRepository(this)
 
         // recyclerViewの初期化
         recyclerView = findViewById(R.id.recyclerView)
@@ -89,6 +96,16 @@ class MatchRecordActivity : AppCompatActivity() {
         val profileUserName: TextView = headerView.findViewById(R.id.profile_user_name)
         val userName = UserManager.getUser()?.userName
         profileUserName.text = userName
+        val profileUserIcon: ImageView = headerView.findViewById(R.id.profile_user_icon)
+        val userIconUrl = UserManager.getUser()?.imageUrl ?: ""
+        imageRepository.downloadImageToUri(userIconUrl) { uri: Uri? ->
+            if (uri != null) {
+                Log.d("ImageDownload", "Image downloaded to: $uri")
+                profileUserIcon.setImageURI(uri)
+            } else {
+                Log.e("ImageDownload", "Failed to download image.")
+            }
+        }
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
