@@ -11,13 +11,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
-import com.example.myapplication_2.viewmodel.SigninViewModel
+import com.example.myapplication_2.viewmodel.SignInViewModel
 import com.example.ttmatchlog.R
 import com.example.ttmatchlog.databinding.ActivitySigninBinding
 
-class SigninActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySigninBinding
-    private val signupViewModel: SigninViewModel by viewModels()
+    private val signupViewModel: SignInViewModel by viewModels()
     private var buttonIsClicked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
