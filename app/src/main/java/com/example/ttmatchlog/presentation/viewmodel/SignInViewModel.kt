@@ -76,12 +76,14 @@ class SigninViewModel : ViewModel() {
         userId: String,
         userName: String,
         email: String,
+        imageUrl: String,
         onResult: (Boolean) -> Unit
     ) {
         val user = hashMapOf(
             "user_id" to userId,
             "user_name" to userName,
             "email" to email,
+            "image_url" to imageUrl,
             "joined_date" to Timestamp.now()
         )
         // Firestoreのusersコレクションにユーザーデータを保存
@@ -104,6 +106,7 @@ class SigninViewModel : ViewModel() {
                         userId = document.getString("user_id") ?: "",
                         userName = document.getString("user_name") ?: "",
                         email = document.getString("email") ?: "",
+                        imageUrl = document.getString("image_url") ?: "",
                         joinedDate = document.getTimestamp("joined_date")
                     )
                     onResult(true)

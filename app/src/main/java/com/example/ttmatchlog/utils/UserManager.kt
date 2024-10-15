@@ -6,8 +6,8 @@ import com.google.firebase.Timestamp
 object UserManager {
     private var user: User? = null
 
-    fun setUser(userId: String, userName: String, email: String, joinedDate: Timestamp?) {
-        user = User(userId, userName, email, joinedDate)
+    fun setUser(userId: String, userName: String, email: String, imageUrl: String, joinedDate: Timestamp?) {
+        user = User(userId, userName, email, imageUrl, joinedDate)
     }
 
     fun getUser(): User? {
