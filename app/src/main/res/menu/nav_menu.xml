@@ -4,11 +4,6 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/nav_edit_profile"
-        android:icon="@drawable/baseline_edit_square_24"
-        android:title="プロフィールを編集" />
-
-    <item
         android:id="@+id/nav_forms"
         android:icon="@drawable/baseline_email_24"
         android:title="お問い合わせ" />

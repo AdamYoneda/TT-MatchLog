@@ -103,9 +103,6 @@ class MatchRecordActivity : AppCompatActivity() {
 
     private fun handleNavigation(menuItem: MenuItem, drawerLayout: DrawerLayout): Boolean {
         when (menuItem.itemId) {
-            R.id.nav_edit_profile -> { /* Profile edit logic */
-            }
-
             R.id.nav_forms -> {
                 moveToGmail()
             }
