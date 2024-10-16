@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -80,7 +81,11 @@ class MatchRecordActivity : AppCompatActivity() {
         setupNavigationView(user, navView, drawerLayout)
     }
 
-    private fun setupNavigationView(user: User, navView: NavigationView, drawerLayout: DrawerLayout) {
+    private fun setupNavigationView(
+        user: User,
+        navView: NavigationView,
+        drawerLayout: DrawerLayout
+    ) {
         val headerView = navView.getHeaderView(0)
         val profileUserName: TextView = headerView.findViewById(R.id.profile_user_name)
         val profileUserIcon: ImageView = headerView.findViewById(R.id.profile_user_icon)
@@ -98,8 +103,13 @@ class MatchRecordActivity : AppCompatActivity() {
 
     private fun handleNavigation(menuItem: MenuItem, drawerLayout: DrawerLayout): Boolean {
         when (menuItem.itemId) {
-            R.id.nav_edit_profile -> { /* Profile edit logic */ }
-            R.id.nav_forms -> { /* Inquiry logic */ }
+            R.id.nav_edit_profile -> { /* Profile edit logic */
+            }
+
+            R.id.nav_forms -> {
+                moveToGmail()
+            }
+
             R.id.nav_logout -> {
                 viewModel.signout()
                 navigateToLogin()
@@ -122,5 +132,31 @@ class MatchRecordActivity : AppCompatActivity() {
         viewModel.tournaments.observe(this, Observer { tournaments ->
             recyclerView.adapter = MatchRecordAdapter(tournaments)
         })
+    }
+
+    // Gmailアプリを起動する
+    private fun moveToGmail() {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            setPackage("com.google.android.gm") // Gmailアプリを指定
+            putExtra(
+                Intent.EXTRA_EMAIL,
+                arrayOf("adam.yoneda.developer+ttmatchlog.android@gmail.com")
+            )
+            putExtra(Intent.EXTRA_SUBJECT, "TTMatchLogAndroid お問い合わせ")
+            val userId = UserManager.getUser()?.userId ?: "不明なUID"
+            val text = "UID: $userId\nお問い合わせ内容を以下にご記入ください。\n"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                "Gmailアプリを起動できませんでした。時間を置いて再度お試しください。",
+                Toast.LENGTH_LONG
+            ).show()
+            e.printStackTrace() // エラーハンドリング（メールアプリがない場合など）
+        }
     }
 }
