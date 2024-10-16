@@ -104,7 +104,6 @@ class MatchRecordActivity : AppCompatActivity() {
                 viewModel.signout()
                 navigateToLogin()
             }
-            R.id.nav_delete_account -> { /* Account deletion logic */ }
         }
         drawerLayout.closeDrawers()
         return true
