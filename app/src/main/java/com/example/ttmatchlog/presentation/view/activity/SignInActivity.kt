@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -99,6 +100,17 @@ class SignInActivity : ComponentActivity() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewSignInScreen() {
+    SignInScreen(
+        selectedImageUri = null,
+        onImageSelect = { /* 何もしない */ },
+        onSignUpClick = { _, _, _ -> /* 何もしない */ },
+        onLoginClick = { /* 何もしない */ }
+    )
+}
+
 @Composable
 fun SignInScreen(
     selectedImageUri: Uri?,
@@ -113,31 +125,24 @@ fun SignInScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp)
-            .background(Color(0xFF6200EA)),
+            .padding(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Card(
-            modifier = Modifier
-                .size(160.dp)
-                .clickable { onImageSelect() },
-            shape = CircleShape,
-            elevation = 0.dp
-        ) {
-            if (selectedImageUri != null) {
-                Image(
-                    painter = rememberAsyncImagePainter(selectedImageUri),
-                    contentDescription = "User Icon",
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Image(
-                    painter = painterResource(R.drawable.icon_account_circle),
-                    contentDescription = "Default Icon",
-                    contentScale = ContentScale.Crop
-                )
-            }
+        if (selectedImageUri != null) {
+            Image(
+                painter = rememberAsyncImagePainter(selectedImageUri),
+                contentDescription = "User Icon",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(160.dp).clickable { onImageSelect() }
+            )
+        } else {
+            Image(
+                painter = painterResource(R.drawable.baseline_account_circle_24),
+                contentDescription = "Default Icon",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(160.dp).clickable { onImageSelect() }
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
