@@ -32,7 +32,7 @@ import com.example.ttmatchlog.R
 
 class SignInActivity : ComponentActivity() {
     private val signupViewModel: SignInViewModel by viewModels()
-    private var selectedImageUri: Uri? = null
+    private var selectedImageUri by mutableStateOf<Uri?>(null)
 
     private val changeImage = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
