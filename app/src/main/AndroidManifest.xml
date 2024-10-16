@@ -13,14 +13,33 @@
         android:theme="@style/Theme.TTMatchLog"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".presentation.view.activity.MatchDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.view.activity.MatchInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.view.activity.TournamentInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.view.activity.MatchRecordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.view.activity.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.view.activity.SignInActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.view.activity.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
