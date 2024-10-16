@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
-    >
+    android:layout_marginTop="16dp"
+    android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <androidx.cardview.widget.CardView
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/baseline_account_circle_24"
-        />
+        app:cardBackgroundColor="@color/baseColor"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:id="@+id/profile_user_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_account_circle" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/profile_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_user_name"
         android:padding="8dp"
-        android:textSize="20dp"
         android:text="UserName"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        />
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
-        android:background="#808080"
-        />
+        android:background="#808080" />
 
 </LinearLayout>

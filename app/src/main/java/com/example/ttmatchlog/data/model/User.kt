@@ -6,5 +6,6 @@ data class User(
     val userId: String = "",
     val userName: String = "",
     val email: String = "",
+    val imageUrl: String = "",
     val joinedDate: Timestamp? = null
 )

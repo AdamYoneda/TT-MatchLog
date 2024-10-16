@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
         // 登録画面へ遷移
         binding.move.setOnClickListener {
-            val intent = Intent(this, SigninActivity::class.java)
+            val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
 

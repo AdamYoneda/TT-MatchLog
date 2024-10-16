@@ -74,6 +74,7 @@ class LoginViewModel : ViewModel() {
                         userId = document.getString("user_id") ?: "",
                         userName = document.getString("user_name") ?: "",
                         email = document.getString("email") ?: "",
+                        imageUrl = document.getString("image_url") ?: "",
                         joinedDate = document.getTimestamp("joined_date")
                     )
 
