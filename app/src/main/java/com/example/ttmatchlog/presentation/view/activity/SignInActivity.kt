@@ -18,6 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -134,14 +135,20 @@ fun SignInScreen(
                 painter = rememberAsyncImagePainter(selectedImageUri),
                 contentDescription = "User Icon",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(160.dp).clickable { onImageSelect() }
+                modifier = Modifier
+                    .size(160.dp)
+                    .clip(CircleShape)
+                    .clickable { onImageSelect() }
             )
         } else {
             Image(
                 painter = painterResource(R.drawable.baseline_account_circle_24),
                 contentDescription = "Default Icon",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(160.dp).clickable { onImageSelect() }
+                modifier = Modifier
+                    .size(160.dp)
+                    .clip(CircleShape)
+                    .clickable { onImageSelect() }
             )
         }
 
